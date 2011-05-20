@@ -8,6 +8,10 @@ var trace = require('../')
   , app = express.createServer();
 
 app.use(express.favicon());
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(express.cookieParser());
+app.use(express.session({ secret: 'foo' }));
 app.use(express.static(__dirname));
 
 function ensureUsername(name) {

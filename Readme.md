@@ -1,7 +1,56 @@
 
 # express-trace
 
-  Express tracer and middleware profiler
+  Express tracer and middleware profiler.
+
+## Installation
+
+     $ npm install express-trace
+
+__NOTE__: supports express >= 2.3.5
+
+## Example
+
+ Suppose we have the following express app with a few routes that can satisfy a url with the form `GET /user/NAME`, and some middlware
+
+    app.use(express.favicon());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.cookieParser());
+    app.use(express.session({ secret: 'foo' }));
+    app.use(express.static(__dirname));
+
+    app.get('/user/:name', function(req, res, next){
+      setTimeout(next, 1000);
+    });
+
+    app.get('/user/:name', function(req, res, next){
+      setTimeout(next, 200);
+    });
+
+    app.get('/user/tobi', function(req, res, next){
+      res.send('loaded tobi');
+    });
+
+all we need to do before we `listen()`, is `require()` express-trace and apply it to the app. This essentially wraps all of the middleware and routes with functions used for reporting.
+
+    require('express-trace')(app);
+
+stderr for `GET /user/tobi`:
+
+    GET /user/tobi
+    middleware / anonymous 0ms
+    middleware / favicon 0ms
+    middleware / bodyParser 0ms
+    middleware / methodOverride 0ms
+    middleware / cookieParser 0ms
+    middleware / session 0ms
+    middleware / static 1ms
+    middleware / router
+      app.get(/user/:name) 1000ms
+      app.get(/user/:name) 200ms
+      app.get(/user/tobi) 
+    responded to GET /user/tobi in 1205ms with 200 "OK"
 
 ## License 
 
