@@ -29,7 +29,11 @@ app.get('/user/:name', function(req, res, next){
 });
 
 app.get('/user/:name', function(req, res, next){
-  res.send('loaded user ' + req.params.name);
+  next();
+});
+
+app.get('/user/tobi', function(req, res, next){
+  res.send('loaded tobi');
 });
 
 app.get('/file/*', function(req, res, next){
