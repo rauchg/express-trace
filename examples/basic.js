@@ -20,6 +20,15 @@ function ensureUsername(name) {
   }
 }
 
+function rejectName(name) {
+  return function rejectName(req, res, next){
+    if (name == req.params.name) return res.send(401);
+    next();
+  }
+}
+
+app.get('/user/:name', rejectName('loki'));
+
 app.get('/user/:name', ensureUsername('tj'), function(req, res, next){
   res.send('loaded tj');
 });
