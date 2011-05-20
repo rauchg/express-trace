@@ -20,6 +20,10 @@ __NOTE__: supports express >= 2.3.5
     app.use(express.session({ secret: 'foo' }));
     app.use(express.static(__dirname));
 
+    app.get('/user/:name', ensureUsername('tj'), function(req, res, next){
+      res.send('loaded tj');
+    });
+
     app.get('/user/:name', function(req, res, next){
       setTimeout(next, 1000);
     });
@@ -38,19 +42,21 @@ all we need to do before we `listen()`, is `require()` express-trace and apply i
 
 stderr for `GET /user/tobi`:
 
-    GET /user/tobi
-    middleware / anonymous 0ms
-    middleware / favicon 0ms
-    middleware / bodyParser 0ms
-    middleware / methodOverride 0ms
-    middleware / cookieParser 0ms
-    middleware / session 0ms
-    middleware / static 1ms
-    middleware / router
-      app.get(/user/:name) 1000ms
-      app.get(/user/:name) 200ms
-      app.get(/user/tobi) 
-    responded to GET /user/tobi in 1205ms with 200 "OK"
+      GET /user/tobi
+      middleware / anonymous 1ms
+      middleware / favicon 0ms
+      middleware / bodyParser 0ms
+      middleware / methodOverride 0ms
+      middleware / cookieParser 0ms
+      middleware / session 1ms
+      middleware / static 0ms
+      middleware / router
+        app.get(/user/:name) 0ms
+          middleware ensureUsername 73ms
+        app.get(/user/:name) 1000ms
+        app.get(/user/:name) 200ms
+        app.get(/user/tobi) 
+      responded to GET /user/tobi in 1279ms with 200 "OK"
 
 ## License 
 
