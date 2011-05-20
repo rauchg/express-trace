@@ -29,7 +29,7 @@ app.get('/user/:name', function(req, res, next){
 });
 
 app.get('/user/:name', function(req, res, next){
-  next();
+  setTimeout(next, 200);
 });
 
 app.get('/user/tobi', function(req, res, next){
