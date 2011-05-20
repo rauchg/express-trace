@@ -16,11 +16,13 @@ app.use(express.static(__dirname));
 
 function ensureUsername(name) {
   return function ensureUsername(req, res, next){
-    if (req.params.name == name) {
-      next();
-    } else {
-      next('route');
-    }
+    setTimeout(function(){
+      if (req.params.name == name) {
+        next();
+      } else {
+        next('route');
+      }
+    }, Math.random() * 300);
   }
 }
 
